@@ -1,8 +1,6 @@
 # ExternalId
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/external_id`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Generates an external id to mask the counts of records inherent with auto-increment ids. Depends on ActiveRecord, and the id is created at time of persistence.
 
 ## Installation
 
@@ -12,17 +10,42 @@ Add this line to your application's Gemfile:
 gem 'external_id'
 ```
 
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install external_id
-
 ## Usage
 
-TODO: Write usage instructions here
+1. Create a column called `external_id` of type string with an index, usually via AR migration.
+
+    ```ruby
+    class SomeMigration
+      add_column :my_classes, :external_id, :string, unique: true
+    end
+    ```
+
+2. Add the following lines to your class: `include ExternalId; external_id prefix: "X"`
+3. Done.
+
+The column name and the length of the id can be customized:
+
+```ruby
+external_id :different_id, bytes: 6
+```
+
+Works extremely well alongside [`friendly_id`](https://github.com/norman/friendly_id):
+
+```ruby
+class MyRecord < ApplicationRecord
+  extend FriendlyId
+  include ExternalId
+
+  external_id prefix: "B"
+  friendly_id :external_id
+
+  ...
+end
+
+# Can now be used as such:
+
+MyRecord.friendly.find("B123456")
+```
 
 ## Development
 
