@@ -15,8 +15,9 @@ gem 'external_id'
 1. Create a column called `external_id` of type string with an index, usually via AR migration.
 
     ```ruby
-    class SomeMigration
-      add_column :my_classes, :external_id, :string, unique: true
+    class AddExternalIdToLessons < ActiveRecord::Migration[5.0]
+      add_column :lessons, :external_id, :string
+      add_index :lessons, :external_id, unique: true
     end
     ```
 
