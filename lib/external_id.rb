@@ -13,7 +13,7 @@ module ExternalId
 
   module ClassMethods
     def external_id(attribute = :external_id, params)
-      validates_uniqueness_of attribute
+      validates_uniqueness_of attribute, allow_nil: true
 
       params = { prefix: "", bytes: 4 }.merge params
       before_create { _initialize_external_id(attribute, params) }
