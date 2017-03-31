@@ -12,11 +12,11 @@ gem 'external_id'
 
 ## Usage
 
-1. Create a column called `external_id` of type string with an index, usually via AR migration.
+1. Create a column called `external_id` of type string (or better yet, [citext](http://nandovieira.com/using-insensitive-case-columns-in-postgresql-with-citext)) with an index, usually via AR migration.
 
     ```ruby
     class AddExternalIdToLessons < ActiveRecord::Migration[5.0]
-      add_column :lessons, :external_id, :string
+      add_column :lessons, :external_id, :string # or even better, :citext
       add_index :lessons, :external_id, unique: true
     end
     ```
